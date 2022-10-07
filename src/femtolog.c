@@ -2,25 +2,32 @@
  * femtolog
  * Copyright (c) 2020 rxi
  * Copyright (c) 2021-2022 SanCloud Ltd
+ * Freestanding strcmp implementation copyright © 2005-2020 Rich Felker, et al.
  * SPDX-License-Identifier: MIT
  */
 
-#include <string.h>
-
 #include "femtolog.h"
+
+#ifdef FEMTOLOG_FREESTANDING
+static inline int strcmp(const char *l, const char *r)
+{
+	for (; *l==*r && *l; l++, r++);
+	return *(unsigned char *)l - *(unsigned char *)r;
+}
+#else
+#include <string.h>
+#endif
 
 struct log_state {
     int level;
-    FILE *dest;
 };
 
 static struct log_state L;
 
 static const char *level_names[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
 
-void femtolog_init(FILE *dest, int level)
+void femtolog_init(int level)
 {
-    femtolog_set_dest(dest);
     femtolog_set_level(level);
     log_trace("femtolog v%s", FEMTOLOG_VERSION);
 }
@@ -63,27 +70,16 @@ int femtolog_get_level()
     return L.level;
 }
 
-void femtolog_set_dest(FILE *dest)
-{
-    L.dest = dest;
-}
-
-FILE *femtolog_get_dest()
-{
-    return L.dest;
-}
-
 void femtolog_vlog(int level, const char *fmt, va_list args)
 {
     if (level < L.level) {
         return;
     }
 
-    fputs(femtolog_level_to_name(level), L.dest);
-    fputs(": ", L.dest);
-    vfprintf(L.dest, fmt, args);
-    fputc('\n', L.dest);
-    fflush(L.dest);
+    femtolog_printf("%s: ", femtolog_level_to_name(level));
+    femtolog_printf(fmt, args);
+    femtolog_printf("\n");
+    femtolog_flush();
 }
 
 void femtolog_log(int level, const char *fmt, ...)
