@@ -24,7 +24,7 @@ typedef void (*femtolog_printline_fn)(const char *, const char *, va_list);
 void femtolog_init(int level, femtolog_printline_fn printline);
 int femtolog_level_is_valid(int level);
 const char *femtolog_level_to_name(int level);
-int femtolog_level_from_name(const char *name);
+int femtolog_name_to_level(const char *name);
 void femtolog_set_level(int level);
 int femtolog_get_level();
 void femtolog_set_printline_fn(femtolog_printline_fn printline);

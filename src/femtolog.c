@@ -50,7 +50,7 @@ const char *femtolog_level_to_name(int level)
         return "(unknown)";
 }
 
-int femtolog_level_from_name(const char *name)
+int femtolog_name_to_level(const char *name)
 {
     int i;
     for (i = 0; i <= FEMTOLOG_FATAL; i++) {
