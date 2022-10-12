@@ -1,7 +1,7 @@
 /*
  * femtolog
- * Copyright (c) 2020 rxi
  * Copyright (c) 2021-2022 SanCloud Ltd
+ * Based on log.c, Copyright (c) 2020 rxi
  * Freestanding strcmp implementation copyright © 2005-2020 Rich Felker, et al.
  * SPDX-License-Identifier: MIT
  */

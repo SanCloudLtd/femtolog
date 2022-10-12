@@ -1,7 +1,7 @@
 /*
  * femtolog
- * Copyright (c) 2020 rxi
  * Copyright (c) 2021-2022 SanCloud Ltd
+ * Based on log.c, Copyright (c) 2020 rxi
  * SPDX-License-Identifier: MIT
  */
 
