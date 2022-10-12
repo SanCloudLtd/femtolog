@@ -1,6 +1,6 @@
 # femtolog
 # Copyright (c) 2021-2022, SanCloud Ltd
-# All Rights Reserved
+# SPDX-License-Identifier: MIT
 
 cmake_minimum_required(VERSION 3.10)
 project(femtolog VERSION 0.1.0)
