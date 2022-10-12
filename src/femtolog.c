@@ -20,15 +20,17 @@ static inline int strcmp(const char *l, const char *r)
 
 struct log_state {
     int level;
+    femtolog_printline_fn printline;
 };
 
 static struct log_state L;
 
 static const char *level_names[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
 
-void femtolog_init(int level)
+void femtolog_init(int level, femtolog_printline_fn printline)
 {
     femtolog_set_level(level);
+    femtolog_set_printline_fn(printline);
     log_trace("femtolog v%s", FEMTOLOG_VERSION);
 }
 
@@ -70,16 +72,23 @@ int femtolog_get_level()
     return L.level;
 }
 
+void femtolog_set_printline_fn(femtolog_printline_fn printline)
+{
+    L.printline = printline;
+}
+
+femtolog_printline_fn femtolog_get_printline_fn()
+{
+    return L.printline;
+}
+
 void femtolog_vlog(int level, const char *fmt, va_list args)
 {
     if (level < L.level) {
         return;
     }
 
-    femtolog_printf("%s: ", femtolog_level_to_name(level));
-    femtolog_printf(fmt, args);
-    femtolog_printf("\n");
-    femtolog_flush();
+    L.printline(femtolog_level_to_name(level), fmt, args);
 }
 
 void femtolog_log(int level, const char *fmt, ...)
