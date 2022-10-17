@@ -6,6 +6,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+/* Retain all internal log messages. */
+#define FEMTOLOG_MIN_LEVEL FEMTOLOG_TRACE
+
 #include "femtolog.h"
 
 #ifdef FEMTOLOG_FREESTANDING
@@ -20,26 +23,33 @@ static inline int strcmp(const char *l, const char *r)
 
 struct log_state {
     int level;
-    femtolog_printline_fn printline;
+    femtolog_output_fn output_fn;
 };
 
 static struct log_state L;
 
-static const char *level_names[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
+static const char *level_names[] = {
+    "TRACE",
+    "DEBUG",
+    "INFO",
+    "WARN",
+    "ERROR",
+    "FATAL"
+};
 
-void femtolog_init(int level, femtolog_printline_fn printline)
+void femtolog_init(int level, femtolog_output_fn output_fn)
 {
     femtolog_set_level(level);
-    femtolog_set_printline_fn(printline);
+    femtolog_set_output_fn(output_fn);
     log_trace("femtolog v%s", FEMTOLOG_VERSION);
 }
 
-int femtolog_level_is_valid(int level)
+bool femtolog_level_is_valid(int level)
 {
     if ((level >= 0) && (level <= FEMTOLOG_FATAL))
-        return 1;
+        return true;
     else
-        return 0;
+        return false;
 }
 
 const char *femtolog_level_to_name(int level)
@@ -58,7 +68,7 @@ int femtolog_name_to_level(const char *name)
             return i;
     }
 
-    return -1;
+    return FEMTOLOG_UNKNOWN;
 }
 
 void femtolog_set_level(int level)
@@ -72,14 +82,14 @@ int femtolog_get_level()
     return L.level;
 }
 
-void femtolog_set_printline_fn(femtolog_printline_fn printline)
+void femtolog_set_output_fn(femtolog_output_fn output_fn)
 {
-    L.printline = printline;
+    L.output_fn = output_fn;
 }
 
-femtolog_printline_fn femtolog_get_printline_fn()
+femtolog_output_fn femtolog_get_output_fn()
 {
-    return L.printline;
+    return L.output_fn;
 }
 
 void femtolog_vlog(int level, const char *fmt, va_list args)
@@ -88,14 +98,5 @@ void femtolog_vlog(int level, const char *fmt, va_list args)
         return;
     }
 
-    L.printline(femtolog_level_to_name(level), fmt, args);
-}
-
-void femtolog_log(int level, const char *fmt, ...)
-{
-    va_list args;
-
-    va_start(args, fmt);
-    femtolog_vlog(level, fmt, args);
-    va_end(args);
+    L.output_fn(femtolog_level_to_name(level), fmt, args);
 }

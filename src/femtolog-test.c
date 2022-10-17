@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+#define FEMTOLOG_MIN_LEVEL FEMTOLOG_TRACE
+
 #include <stdio.h>
 #include "femtolog.h"
 
-void printline(const char *prefix, const char *fmt, va_list args)
+void output(const char *prefix, const char *fmt, va_list args)
 {
     fprintf(stderr, "%s: ", prefix);
     vfprintf(stderr, fmt, args);
@@ -17,13 +19,13 @@ void printline(const char *prefix, const char *fmt, va_list args)
 
 int main()
 {
-    femtolog_init(FEMTOLOG_TRACE, printline);
+    femtolog_init(FEMTOLOG_INFO, output);
 
-    log_trace("t0");
-    log_debug("t1");
-    log_info("t2");
-    log_warn("t3");
-    log_error("t4");
-    log_fatal("t5");
+    log_trace("t%d", 0);
+    log_debug("t%d", 1);
+    log_info("t%d", 2);
+    log_warn("t%d", 3);
+    log_error("t%d", 4);
+    log_fatal("t%d", 5);
     return 0;
 }
