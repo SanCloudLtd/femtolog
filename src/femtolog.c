@@ -26,7 +26,7 @@ struct log_state {
     femtolog_output_fn output_fn;
 };
 
-static struct log_state L;
+static struct log_state L = { FEMTOLOG_UNKNOWN, (femtolog_output_fn)NULL };
 
 static const char *level_names[] = {
     "TRACE",
@@ -98,5 +98,8 @@ void femtolog_vlog(int level, const char *fmt, va_list args)
         return;
     }
 
-    L.output_fn(femtolog_level_to_name(level), fmt, args);
+    if(NULL != L.output_fn)
+    {
+        L.output_fn(femtolog_level_to_name(level), fmt, args);
+    }
 }
