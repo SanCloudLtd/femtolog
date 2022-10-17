@@ -20,10 +20,10 @@ endif(DOXYGEN_FOUND)
 add_definitions(-DFEMTOLOG_VERSION="${femtolog_VERSION}")
 
 add_library(femtolog STATIC src/femtolog.c)
-add_executable(femtolog-test src/femtolog-test.c)
-target_link_libraries(femtolog-test femtolog)
+add_executable(femtolog-example src/femtolog-example.c)
+target_link_libraries(femtolog-example femtolog)
 
 include(GNUInstallDirs)
 install(TARGETS femtolog LIBRARY)
-install(TARGETS femtolog-test RUNTIME)
+install(TARGETS femtolog-example RUNTIME)
 install(FILES src/femtolog.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

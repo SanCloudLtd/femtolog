@@ -39,7 +39,7 @@
  * userspace program; or to a serial port in a freestanding application.
  *
  * An example of an appropriate function can be found in
- * femtolog-test.c.
+ * femtolog-example.c.
  *
  * \param prefix    The message's log level, rendered as an upper-case
  *                  string.
