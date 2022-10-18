@@ -94,12 +94,6 @@ femtolog_output_fn femtolog_get_output_fn()
 
 void femtolog_vlog(int level, const char *fmt, va_list args)
 {
-    if (level < L.level) {
-        return;
-    }
-
-    if(NULL != L.output_fn)
-    {
+    if ((level >= L.level) && (NULL != L.output_fn))
         L.output_fn(femtolog_level_to_name(level), fmt, args);
-    }
 }
