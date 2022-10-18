@@ -44,13 +44,14 @@ def do_release(args):
     os.makedirs("release")
     run(f"tar czf release/femtolog-html-docs-{args.version}.tar.gz --transform 's,^build/html,femtolog-html-docs-{args.version},' build/html")
     run(f"git archive -o release/femtolog-{args.version}.tar.gz --prefix=femtolog-{args.version}/ {release_commit}")
-    with open("release/RELEASE_NOTES.txt", "w") as f:
-        f.write(f"femtolog {args.version}\n")
-        text = capture(f"markdown-extract -n ^{args.version} ChangeLog.md")
-        f.write(text)
+    with open(f"release/femtolog-rel-notes-{args.version}.md", "w") as f_notes, open("release/trimmed-rel-notes.md", "w") as f_trimmed:
+        f_notes.write(f"femtolog {args.version}\n\n")
+        text = capture(f"markdown-extract -n ^{args.version} ChangeLog.md").strip() + "\n"
+        f_notes.write(text)
+        f_trimmed.write(text)
 
     file_list = " ".join([
-        "RELEASE_NOTES.txt",
+        f"release/femtolog-rel-notes-{args.version}.md",
         f"femtolog-{args.version}.tar.gz",
         f"femtolog-html-docs-{args.version}.tar.gz",
     ])
@@ -72,7 +73,7 @@ def do_release(args):
         run(f"git push origin {release_commit}:refs/heads/release")
         run(f"git push origin v{args.version}")
         run(
-            f"glab release create v{args.version} -F RELEASE_NOTES.txt {file_list}",
+            f"glab release create v{args.version} -n 'femtolog v{args.version}' -F trimmed-rel-notes.md {file_list}",
             cwd="release",
         )
     if not args.no_github:
@@ -80,7 +81,7 @@ def do_release(args):
         run(f"git push gh {release_commit}:refs/heads/release")
         run(f"git push gh v{args.version}")
         run(
-            f"gh release create v{args.version} -F RELEASE_NOTES.txt {file_list}",
+            f"gh release create v{args.version} -t 'femtolog v{args.version}' -F trimmed-rel-notes.md {file_list}",
             cwd="release",
         )
 
