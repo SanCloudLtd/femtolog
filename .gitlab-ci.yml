@@ -1,0 +1,16 @@
+# femtolog
+# Copyright (c) 2022, SanCloud Ltd
+# SPDX-License-Identifier: MIT
+
+stages:
+  - build
+
+build:
+  stage: build
+  image: gitlab-registry.sancloud.co.uk/bsp/build-containers/iot-build:latest
+  script:
+    - ./scripts/maintainer.py build --docs
+  artifacts:
+    paths:
+      - build
+    expire_in: 1 week
