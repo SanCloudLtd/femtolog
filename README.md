@@ -36,6 +36,14 @@ be built using doxygen.
 * Paul Barker
   [:envelope:](mailto:paul.barker@sancloud.com)
 
+## Contributing
+
+Issues and Pull Requests for this project may be opened on our primary
+GitHub repository at https://github.com/SanCloudLtd/femtolog. When
+submitting a pull request, all commits should include a `Signed-off-by`
+line to indicate that your contribution is made in accordance with the
+[Developer Certificate of Origin](https://developercertificate.org/).
+
 ## License
 
 Copyright (c) 2021-2022 SanCloud Ltd.
