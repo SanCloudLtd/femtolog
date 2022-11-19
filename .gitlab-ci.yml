@@ -9,7 +9,7 @@ build:
   stage: build
   image: gitlab-registry.sancloud.co.uk/bsp/build-containers/iot-build:latest
   script:
-    - ./scripts/maintainer.py build --docs
+    - ./scripts/maintainer.py build --docs --lint
   artifacts:
     paths:
       - build

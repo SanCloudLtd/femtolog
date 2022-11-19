@@ -18,10 +18,21 @@ def capture(cmd, **kwargs):
 
 
 def do_build(args):
-    run("cmake -B build .")
+    run("cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build .")
     run("cmake --build build")
     if args.docs:
         run("cmake --build build -t docs")
+    if args.lint:
+        run("clang-tidy "
+            "--checks=-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling "
+            "-p build/compile_commands.json "
+            "src/femtolog.c src/femtolog-example.c")
+        run("cppcheck "
+            "--enable=all "
+            "--suppress=missingIncludeSystem "
+            "--suppress=unusedFunction "
+            "--inline-suppr "
+            "--project=build/compile_commands.json")
 
 
 def do_clean(args):
@@ -37,6 +48,7 @@ def do_release(args):
     release_commit = capture("git rev-parse HEAD").strip()
 
     args.docs = True
+    args.lint = False
     do_build(args)
 
     if os.path.exists("release"):
@@ -119,6 +131,9 @@ def parse_args():
     build_cmd.set_defaults(cmd_fn=do_build)
     build_cmd.add_argument(
         "-d", "--docs", action="store_true", help="Build documentation"
+    )
+    build_cmd.add_argument(
+        "-L", "--lint", action="store_true", help="Check code with clang-tidy & cppcheck"
     )
 
     clean_cmd = subparsers.add_parser(
