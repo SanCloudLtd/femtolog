@@ -14,15 +14,16 @@ Changes from v0.2.0:
 * Only use printf function attribute when building with GCC or clang
   (since other compilers such as MSVC may not support this).
 
-* Adopt a consistent code style, enforced via clang-format.
-
-* Add GitLab CI configuration.
-
-* Add contribution notes to the readme file.
-
 * Explicitly initialise the internal log state object.
 
 * Confirm output function is non-NULL before calling it.
+
+* Add contribution notes to the readme file.
+
+* Adopt a consistent code style, enforced via clang-format for C code
+  and black for Python scripts.
+
+* Add GitLab CI configuration.
 
 * Improve release scripting and add release directory to the git ignore
   list.
