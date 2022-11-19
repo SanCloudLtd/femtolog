@@ -11,6 +11,9 @@ Minor patch release.
 
 Changes from v0.2.0:
 
+* Only use printf function attribute when building with GCC or clang
+  (since other compilers such as MSVC may not support this).
+
 * Add GitLab CI configuration.
 
 * Add contribution notes to the readme file.

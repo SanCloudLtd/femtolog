@@ -16,8 +16,14 @@
 
 #ifdef DOXYGEN
 #define FEMTOLOG_MIN_LEVEL 0
-#define __attribute__(x)
 #define static
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#define femtolog_attr_printf(fmt_index, args_index) \
+    __attribute__((format(printf, fmt_index, args_index)))
+#else
+#define femtolog_attr_printf(fmt_index, args_index)
 #endif
 
 /**
@@ -196,7 +202,7 @@ void femtolog_vlog(int level, const char *fmt, va_list args);
  * \param ...       Additional arguments, interpreted according to the
  *                  format string.
  */
-__attribute__((format(printf, 2, 3)))
+femtolog_attr_printf(2, 3)
 static inline void femtolog_log(int level, const char *fmt, ...)
 {
     va_list args;
@@ -229,7 +235,7 @@ static inline void femtolog_log(int level, const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_trace(const char *fmt, ...)
 {
     va_list args;
@@ -256,7 +262,7 @@ static inline void log_trace(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_debug(const char *fmt, ...)
 {
     va_list args;
@@ -283,7 +289,7 @@ static inline void log_debug(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_info(const char *fmt, ...)
 {
     va_list args;
@@ -310,7 +316,7 @@ static inline void log_info(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_warn(const char *fmt, ...)
 {
     va_list args;
@@ -337,7 +343,7 @@ static inline void log_warn(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_error(const char *fmt, ...)
 {
     va_list args;
@@ -364,7 +370,7 @@ static inline void log_error(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_fatal(const char *fmt, ...)
 {
     va_list args;
@@ -391,7 +397,7 @@ static inline void log_fatal(const char *fmt, ...)
  * \param ...       Additional arguments, interpreted according to the
  *                  format string.
  */
-__attribute__((format(printf, 2, 3)))
+femtolog_attr_printf(2, 3)
 static inline void log_dynamic(int level, const char *fmt, ...)
 {
     va_list args;
@@ -421,7 +427,7 @@ static inline void log_dynamic(int level, const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-__attribute__((format(printf, 1, 2)))
+femtolog_attr_printf(1, 2)
 static inline void log_fatal_exit(const char *fmt, ...)
 {
     va_list args;
