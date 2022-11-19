@@ -1,0 +1,7 @@
+# Copyright (c) 2022 SanCloud Ltd
+# SPDX-License-Identifier: MIT
+
+[flake8]
+select = BLK,C,E,F,W
+ignore = E203,W503
+max-line-length = 100

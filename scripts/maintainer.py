@@ -23,16 +23,20 @@ def do_build(args):
     if args.docs:
         run("cmake --build build -t docs")
     if args.lint:
-        run("clang-tidy "
+        run(
+            "clang-tidy "
             "--checks=-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling "
             "-p build/compile_commands.json "
-            "src/femtolog.c src/femtolog-example.c")
-        run("cppcheck "
+            "src/femtolog.c src/femtolog-example.c"
+        )
+        run(
+            "cppcheck "
             "--enable=all "
             "--suppress=missingIncludeSystem "
             "--suppress=unusedFunction "
             "--inline-suppr "
-            "--project=build/compile_commands.json")
+            "--project=build/compile_commands.json"
+        )
 
 
 def do_clean(args):
@@ -54,19 +58,31 @@ def do_release(args):
     if os.path.exists("release"):
         shutil.rmtree("release")
     os.makedirs("release")
-    run(f"tar czf release/femtolog-html-docs-{args.version}.tar.gz --transform 's,^build/html,femtolog-html-docs-{args.version},' build/html")
-    run(f"git archive -o release/femtolog-{args.version}.tar.gz --prefix=femtolog-{args.version}/ {release_commit}")
-    with open(f"release/femtolog-rel-notes-{args.version}.md", "w") as f_notes, open("release/trimmed-rel-notes.md", "w") as f_trimmed:
+    run(
+        f"tar czf release/femtolog-html-docs-{args.version}.tar.gz "
+        f"--transform 's,^build/html,femtolog-html-docs-{args.version},' build/html"
+    )
+    run(
+        f"git archive -o release/femtolog-{args.version}.tar.gz "
+        f"--prefix=femtolog-{args.version}/ {release_commit}"
+    )
+    with open(f"release/femtolog-rel-notes-{args.version}.md", "w") as f_notes, open(
+        "release/trimmed-rel-notes.md", "w"
+    ) as f_trimmed:
         f_notes.write(f"femtolog {args.version}\n\n")
-        text = capture(f"markdown-extract -n ^{args.version} ChangeLog.md").strip() + "\n"
+        text = (
+            capture(f"markdown-extract -n ^{args.version} ChangeLog.md").strip() + "\n"
+        )
         f_notes.write(text)
         f_trimmed.write(text)
 
-    file_list = " ".join([
-        f"release/femtolog-rel-notes-{args.version}.md",
-        f"femtolog-{args.version}.tar.gz",
-        f"femtolog-html-docs-{args.version}.tar.gz",
-    ])
+    file_list = " ".join(
+        [
+            f"release/femtolog-rel-notes-{args.version}.md",
+            f"femtolog-{args.version}.tar.gz",
+            f"femtolog-html-docs-{args.version}.tar.gz",
+        ]
+    )
     with open("release/SHA256SUMS", "w") as f:
         text = capture(f"sha256sum {file_list}", cwd="release")
         f.write(text)
@@ -85,7 +101,8 @@ def do_release(args):
         run(f"git push origin {release_commit}:refs/heads/release")
         run(f"git push origin v{args.version}")
         run(
-            f"glab release create v{args.version} -n 'femtolog v{args.version}' -F trimmed-rel-notes.md {file_list}",
+            f"glab release create v{args.version} -n 'femtolog v{args.version}' "
+            f"-F trimmed-rel-notes.md {file_list}",
             cwd="release",
         )
     if not args.no_github:
@@ -93,7 +110,8 @@ def do_release(args):
         run(f"git push gh {release_commit}:refs/heads/release")
         run(f"git push gh v{args.version}")
         run(
-            f"gh release create v{args.version} -t 'femtolog v{args.version}' -F trimmed-rel-notes.md {file_list}",
+            f"gh release create v{args.version} -t 'femtolog v{args.version}' "
+            f"-F trimmed-rel-notes.md {file_list}",
             cwd="release",
         )
 
@@ -108,7 +126,9 @@ def do_release_signatures(args):
 
 def do_set_version(args):
     with open("CMakeLists.txt", "r+") as f:
-        text = re.sub(r"(project\(femtolog VERSION).*\n", rf"\1 {args.version})\n", f.read())
+        text = re.sub(
+            r"(project\(femtolog VERSION).*\n", rf"\1 {args.version})\n", f.read()
+        )
         f.seek(0)
         f.write(text)
         f.truncate()
@@ -133,7 +153,10 @@ def parse_args():
         "-d", "--docs", action="store_true", help="Build documentation"
     )
     build_cmd.add_argument(
-        "-L", "--lint", action="store_true", help="Check code with clang-tidy & cppcheck"
+        "-L",
+        "--lint",
+        action="store_true",
+        help="Check code with clang-tidy & cppcheck",
     )
 
     clean_cmd = subparsers.add_parser(
