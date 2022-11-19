@@ -7,6 +7,7 @@
 #define FEMTOLOG_MIN_LEVEL FEMTOLOG_TRACE
 
 #include <stdio.h>
+
 #include "femtolog.h"
 
 void output(const char *prefix, const char *fmt, va_list args)

@@ -14,8 +14,9 @@
 #ifdef FEMTOLOG_FREESTANDING
 static inline int strcmp(const char *l, const char *r)
 {
-	for (; *l==*r && *l; l++, r++);
-	return *(unsigned char *)l - *(unsigned char *)r;
+    for (; *l == *r && *l; l++, r++)
+        ;
+    return *(unsigned char *)l - *(unsigned char *)r;
 }
 #else
 #include <string.h>
@@ -28,14 +29,7 @@ struct log_state {
 
 static struct log_state L = { FEMTOLOG_UNKNOWN, (femtolog_output_fn)NULL };
 
-static const char *level_names[] = {
-    "TRACE",
-    "DEBUG",
-    "INFO",
-    "WARN",
-    "ERROR",
-    "FATAL"
-};
+static const char *level_names[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" };
 
 void femtolog_init(int level, femtolog_output_fn output_fn)
 {

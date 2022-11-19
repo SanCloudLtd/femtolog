@@ -20,7 +20,7 @@
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
-#define femtolog_attr_printf(fmt_index, args_index) \
+#define femtolog_attr_printf(fmt_index, args_index)                                                \
     __attribute__((format(printf, fmt_index, args_index)))
 #else
 #define femtolog_attr_printf(fmt_index, args_index)
@@ -53,9 +53,7 @@
  * \param args      The message's additional arguments as a va_list, to
  *                  be interpreted according to the format string.
  */
-typedef void (*femtolog_output_fn)(const char *prefix,
-                                   const char *fmt,
-                                   va_list args);
+typedef void (*femtolog_output_fn)(const char *prefix, const char *fmt, va_list args);
 
 /**
  * Initialise the femtolog library.
@@ -202,8 +200,7 @@ void femtolog_vlog(int level, const char *fmt, va_list args);
  * \param ...       Additional arguments, interpreted according to the
  *                  format string.
  */
-femtolog_attr_printf(2, 3)
-static inline void femtolog_log(int level, const char *fmt, ...)
+femtolog_attr_printf(2, 3) static inline void femtolog_log(int level, const char *fmt, ...)
 {
     va_list args;
 
@@ -235,8 +232,7 @@ static inline void femtolog_log(int level, const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_trace(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_trace(const char *fmt, ...)
 {
     va_list args;
 
@@ -262,8 +258,7 @@ static inline void log_trace(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_debug(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_debug(const char *fmt, ...)
 {
     va_list args;
 
@@ -289,8 +284,7 @@ static inline void log_debug(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_info(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_info(const char *fmt, ...)
 {
     va_list args;
 
@@ -316,8 +310,7 @@ static inline void log_info(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_warn(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_warn(const char *fmt, ...)
 {
     va_list args;
 
@@ -343,8 +336,7 @@ static inline void log_warn(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_error(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_error(const char *fmt, ...)
 {
     va_list args;
 
@@ -370,8 +362,7 @@ static inline void log_error(const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_fatal(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_fatal(const char *fmt, ...)
 {
     va_list args;
 
@@ -397,8 +388,7 @@ static inline void log_fatal(const char *fmt, ...)
  * \param ...       Additional arguments, interpreted according to the
  *                  format string.
  */
-femtolog_attr_printf(2, 3)
-static inline void log_dynamic(int level, const char *fmt, ...)
+femtolog_attr_printf(2, 3) static inline void log_dynamic(int level, const char *fmt, ...)
 {
     va_list args;
 
@@ -427,8 +417,7 @@ static inline void log_dynamic(int level, const char *fmt, ...)
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2)
-static inline void log_fatal_exit(const char *fmt, ...)
+femtolog_attr_printf(1, 2) static inline void log_fatal_exit(const char *fmt, ...)
 {
     va_list args;
 
