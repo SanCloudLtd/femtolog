@@ -66,19 +66,17 @@ def do_release(args):
         f"git archive -o release/femtolog-{args.version}.tar.gz "
         f"--prefix=femtolog-{args.version}/ {release_commit}"
     )
-    with open(f"release/femtolog-rel-notes-{args.version}.md", "w") as f_notes, open(
-        "release/trimmed-rel-notes.md", "w"
-    ) as f_trimmed:
-        f_notes.write(f"femtolog {args.version}\n\n")
-        text = (
-            capture(f"markdown-extract -n ^{args.version} ChangeLog.md").strip() + "\n"
-        )
-        f_notes.write(text)
-        f_trimmed.write(text)
+
+    rel_notes = (
+        capture(f"markdown-extract -n ^{args.version} ChangeLog.md").strip() + "\n"
+    )
+    with open(f"release/femtolog-release-notes-{args.version}.md", "w") as f_notes:
+        f_notes.write(f"# Release Notes: femtolog v{args.version}\n\n")
+        f_notes.write(rel_notes)
 
     file_list = " ".join(
         [
-            f"release/femtolog-rel-notes-{args.version}.md",
+            f"femtolog-release-notes-{args.version}.md",
             f"femtolog-{args.version}.tar.gz",
             f"femtolog-html-docs-{args.version}.tar.gz",
         ]
@@ -95,15 +93,17 @@ def do_release(args):
         run("gpg --detach-sign -a release/B3SUMS")
         file_list += " SHA256SUMS.asc B3SUMS.asc"
 
-    run(f"git tag -a -F release/RELEASE_NOTES.txt v{args.version} HEAD")
+    run(f"git tag -m 'femtolog v{args.version}' v{args.version} HEAD")
     if not args.no_gitlab:
         run("git push origin")
         run(f"git push origin {release_commit}:refs/heads/release")
         run(f"git push origin v{args.version}")
         run(
             f"glab release create v{args.version} -n 'femtolog v{args.version}' "
-            f"-F trimmed-rel-notes.md {file_list}",
+            f"-F- {file_list}",
             cwd="release",
+            input=rel_notes,
+            encoding="utf-8",
         )
     if not args.no_github:
         run("git push gh")
@@ -111,8 +111,10 @@ def do_release(args):
         run(f"git push gh v{args.version}")
         run(
             f"gh release create v{args.version} -t 'femtolog v{args.version}' "
-            f"-F trimmed-rel-notes.md {file_list}",
+            f"-F- {file_list}",
             cwd="release",
+            input=rel_notes,
+            encoding="utf-8",
         )
 
 
