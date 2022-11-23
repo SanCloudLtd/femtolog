@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 cmake_minimum_required(VERSION 3.10)
-project(femtolog VERSION 0.2.0)
+project(femtolog VERSION 0.2.1)
 
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
