@@ -22,8 +22,10 @@
 #if defined(__GNUC__) || defined(__clang__)
 #define femtolog_attr_printf(fmt_index, args_index)                                                \
     __attribute__((format(printf, fmt_index, args_index)))
+#define femtolog_attr_noreturn() __attribute__((noreturn))
 #else
 #define femtolog_attr_printf(fmt_index, args_index)
+#define femtolog_attr_noreturn()
 #endif
 
 /**
@@ -417,7 +419,8 @@ femtolog_attr_printf(2, 3) static inline void log_dynamic(int level, const char 
  * \param ... Additional arguments, interpreted according to the format
  *            string.
  */
-femtolog_attr_printf(1, 2) static inline void log_fatal_exit(const char *fmt, ...)
+femtolog_attr_printf(1, 2)
+    femtolog_attr_noreturn() static inline void log_fatal_exit(const char *fmt, ...)
 {
     va_list args;
 
