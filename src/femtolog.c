@@ -40,26 +40,29 @@ void femtolog_init(int level, femtolog_output_fn output_fn)
 
 bool femtolog_level_is_valid(int level)
 {
-    if ((level >= 0) && (level <= FEMTOLOG_FATAL))
+    if ((level >= 0) && (level <= FEMTOLOG_FATAL)) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
 const char *femtolog_level_to_name(int level)
 {
-    if (femtolog_level_is_valid(level))
+    if (femtolog_level_is_valid(level)) {
         return level_names[level];
-    else
+    } else {
         return "(unknown)";
+    }
 }
 
 int femtolog_name_to_level(const char *name)
 {
     int i;
     for (i = 0; i <= FEMTOLOG_FATAL; i++) {
-        if (!strcmp(name, level_names[i]))
+        if (!strcmp(name, level_names[i])) {
             return i;
+        }
     }
 
     return FEMTOLOG_UNKNOWN;
@@ -67,8 +70,9 @@ int femtolog_name_to_level(const char *name)
 
 void femtolog_set_level(int level)
 {
-    if (femtolog_level_is_valid(level))
+    if (femtolog_level_is_valid(level)) {
         L.level = level;
+    }
 }
 
 int femtolog_get_level()
@@ -88,6 +92,7 @@ femtolog_output_fn femtolog_get_output_fn()
 
 void femtolog_vlog(int level, const char *fmt, va_list args)
 {
-    if ((level >= L.level) && (NULL != L.output_fn))
+    if ((level >= L.level) && (NULL != L.output_fn)) {
         L.output_fn(femtolog_level_to_name(level), fmt, args);
+    }
 }
