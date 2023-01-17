@@ -1,0 +1,11 @@
+# femtolog
+# Copyright 2023 SanCloud Ltd
+# SPDX-License-Identifier: MIT
+
+---
+Checks: >
+  readability-braces-around-statements,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
+CheckOptions:
+  - key:    readability-braces-around-statements.ShortStatementLines
+    value:  '0'

@@ -25,7 +25,6 @@ def do_build(args):
     if args.lint:
         run(
             "clang-tidy "
-            "--checks=-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling "
             "-p build/compile_commands.json "
             "src/femtolog.c src/femtolog-example.c"
         )
